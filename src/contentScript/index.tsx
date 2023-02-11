@@ -3,20 +3,22 @@ import { createRoot } from 'react-dom/client';
 import '../assets/tailwind.css';
 import Status from './Status';
 
-function init() {
+function render() {
   const timer = setInterval(() => {
     const targetDiv = document.getElementsByClassName('mt-3 flex space-x-4')[0];
-
     if (targetDiv) {
       clearInterval(timer);
 
-      const appContainer = document.createElement('div');
-      targetDiv.insertBefore(appContainer, targetDiv.childNodes[2]);
-      createRoot(appContainer).render(<Status status={"neutral"} />);
+      if (document.getElementById('app-container')) {
+        return;
+      }
 
-      console.log(appContainer);
+      const appContainer = document.createElement('div');
+      appContainer.id = 'app-container';
+      targetDiv.insertBefore(appContainer, targetDiv.childNodes[1]);
+      createRoot(appContainer).render(<Status status={'neutral'} />);
     }
   });
 }
 
-init();
+render();

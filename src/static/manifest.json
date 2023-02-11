@@ -8,7 +8,12 @@
     "default_title": "LeetCode Problems Status",
     "default_icon": "icon.png"
   },
-  "permissions": [],
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/*"
+  ],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
@@ -16,8 +21,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://leetcode.com/problems/*"],
-      "js": ["contentScript.js"]
+      "matches": [
+        "https://leetcode.com/problems/*"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
 }

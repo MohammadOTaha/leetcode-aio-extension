@@ -8,7 +8,8 @@ const autoprefixer = require('autoprefixer');
 module.exports = {
   entry: {
     popup: path.resolve('src/popup/index.tsx'),
-    contentScript: path.resolve('src/contentScript/index.tsx')
+    contentScript: path.resolve('src/contentScript/index.tsx'),
+    background: path.resolve('src/background/background.ts')
   },
   module: {
     rules: [
