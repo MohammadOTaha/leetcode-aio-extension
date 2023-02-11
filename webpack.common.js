@@ -4,6 +4,7 @@ const HtmlPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
@@ -53,10 +54,14 @@ module.exports = {
       patterns: [
         {
           from: path.resolve('src/static'),
-          to: path.resolve('dist')
+          to: path.resolve('dist'),
+          globOptions: {
+            ignore: ['**/firebase/**']
+          }
         }
       ]
     }),
+    new Dotenv(),
     ...getHtmlPlugins(['popup'])
   ],
   resolve: {
