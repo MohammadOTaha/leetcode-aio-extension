@@ -1,6 +1,6 @@
-import { initializeApp } from '../static/firebase/firebase-app.js';
-import { getFirestore } from '../static/firebase/firebase-firestore.js';
-import { getAuth } from '../static/firebase/firebase-auth.js';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

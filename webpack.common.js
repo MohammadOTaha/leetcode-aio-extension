@@ -1,7 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const Dotenv = require('dotenv-webpack');
@@ -11,6 +10,11 @@ module.exports = {
     popup: path.resolve('src/popup/index.tsx'),
     contentScript: path.resolve('src/contentScript/index.tsx'),
     background: path.resolve('src/background/index.ts')
+  },
+  output: {
+    filename: '[name].js',
+    path: path.join(__dirname, 'dist'),
+    clean: true
   },
   module: {
     rules: [
@@ -47,9 +51,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin({
-      cleanStaleWebpackAssets: false
-    }),
     new CopyPlugin({
       patterns: [
         {
@@ -67,14 +68,10 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.js', '.ts']
   },
-  output: {
-    filename: '[name].js',
-    path: path.join(__dirname, 'dist')
-  },
   optimization: {
     splitChunks: {
       chunks(chunk) {
-        return chunk.name !== 'contentScript';
+        return chunk.name !== 'contentScript' && chunk.name !== 'background';
       }
     }
   }
