@@ -1,17 +1,26 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import LeetCodeSingleton from '../api/leetcode';
 import '../assets/tailwind.css';
-import Popup from './popup';
+import { requestSessionCookie } from '../background/messanger';
+import Popup from './Popup';
 
-function init() {
+async function render() {
   const appContainer = document.createElement('div');
   document.body.appendChild(appContainer);
-  if (!appContainer) {
-    throw new Error('Can not find AppContainer');
-  }
   const root = createRoot(appContainer);
-  console.log(appContainer);
-  root.render(<Popup />);
+
+  let username, error;
+  try {
+    let sessionCookie = await requestSessionCookie();
+    username = LeetCodeSingleton.getInstance(sessionCookie).getUserName();
+  } catch (e) {
+    error = true;
+  } finally {
+    root.render(<Popup username={username} error={error} />);
+  }
 }
 
-init();
+(async () => {
+  await render();
+})();

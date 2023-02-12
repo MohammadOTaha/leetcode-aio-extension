@@ -9,7 +9,8 @@
     "default_icon": "icon.png"
   },
   "permissions": [
-    "scripting"
+    "scripting",
+    "cookies"
   ],
   "host_permissions": [
     "https://leetcode.com/*"
@@ -24,9 +25,8 @@
       "matches": [
         "https://leetcode.com/problems/*"
       ],
-      "js": [
-        "contentScript.js"
-      ]
+      "js": ["contentScript.js"],
+      "run_at": "document_end"
     }
   ],
   "background": {
