@@ -64,24 +64,24 @@ const faceSVGPaths = {
 };
 
 const faceColor = {
-  happy:    'text-green-500',
-  neutral:  'text-yellow-500',
-  sad:      'text-red-500'
-}
+  happy: 'text-green-500',
+  neutral: 'text-yellow-500',
+  sad: 'text-red-500'
+};
 
 const statusString = {
-  happy:    '100% understood!',
-  neutral:  'Need to review the code.',
-  sad:      'Needs to be solved again.'
-}
+  happy: '100% understood!',
+  neutral: 'Need to review the code.',
+  sad: 'Needs to be solved again.'
+};
 
 export default function Status({ status }) {
   return (
-    <div className="dropdown dropdown-hover">
+    <div className="dropdown">
       <label tabIndex={0} className={`btn btn-circle btn-ghost btn-xs ${faceColor[status]}`}>
         <svg
-          width="1.7em"
-          height="1.7em"
+          width="1.65em"
+          height="1.65em"
           viewBox="0 0 24 24"
           fill="currentColor"
           xmlns="http://www.w3.org/2000/svg">
@@ -93,11 +93,94 @@ export default function Status({ status }) {
 
       <div
         tabIndex={0}
-        className="dropdown-content fixed z-modal md:block shadow-level3 dark:shadow-dark-level3 w-max p-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100 translate-y-0">
-        <p>
-          <span className="font-bold">Status:</span>{' '}
+        className="flex flex-col dropdown-content fixed md:block shadow-2xl w-max px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
+        <div className="flex ml-2 gap-2">
+          <span className="font-bold">Status:</span>
           <span className={`font-bold ${faceColor[status]}`}>{statusString[status]}</span>
-        </p>
+        </div>
+
+        <div className="divider my-0 -mx-3" />
+
+        {/*  update status */}
+        <div className="flex ml-2 gap-2">
+          <span className="font-bold pt-[1px]">Change to:</span>
+          <button
+            className={
+              'btn btn-circle btn-ghost btn-xs text-green-500' +
+              (status === 'happy' ? ' bg-gray-700' : '')
+            }
+            onClick={() => {
+              console.log('happy');
+            }}>
+            <svg
+              width="1.65em"
+              height="1.65em"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              {faceSVGPaths['happy'].map((path, index) => (
+                <React.Fragment key={index}>{path}</React.Fragment>
+              ))}
+            </svg>
+          </button>
+          <button
+            className={
+              'btn btn-circle btn-ghost btn-xs text-yellow-500' +
+              (status === 'neutral' ? ' bg-gray-700' : '')
+            }
+            onClick={() => {
+              console.log('neutral');
+            }}>
+            <svg
+              width="1.65em"
+              height="1.65em"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              {faceSVGPaths['neutral'].map((path, index) => (
+                <React.Fragment key={index}>{path}</React.Fragment>
+              ))}
+            </svg>
+          </button>
+          <button
+            className={
+              'btn btn-circle btn-ghost btn-xs text-red-500' +
+              (status === 'sad' ? ' bg-gray-700' : '')
+            }
+            onClick={() => {
+              console.log('sad');
+            }}>
+            <svg
+              width="1.65em"
+              height="1.65em"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              {faceSVGPaths['sad'].map((path, index) => (
+                <React.Fragment key={index}>{path}</React.Fragment>
+              ))}
+            </svg>
+          </button>
+        </div>
+
+        {/*  add reminder */}
+        <div className="dropdown mt-2">
+          <button className="px-3 py-1.5 w-48 gap-2 items-center justify-center transition-all focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
+            <svg
+              className="w-4 h-4 ml-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm0 2a10 10 0 100-20 10 10 0 000 20z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="font-bold text-white">Add Reminder</span>
+          </button>
+        </div>
       </div>
     </div>
   );
