@@ -93,7 +93,7 @@ export default function Status({ status }) {
 
       <div
         tabIndex={0}
-        className="flex flex-col dropdown-content fixed md:block shadow-2xl w-max px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
+        className="flex flex-col dropdown-content fixed md:block shadow-2xl w-[16rem] px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
         <div className="flex ml-2 gap-2">
           <span className="font-bold">Status:</span>
           <span className={`font-bold ${faceColor[status]}`}>{statusString[status]}</span>
@@ -164,8 +164,8 @@ export default function Status({ status }) {
         </div>
 
         {/*  add reminder */}
-        <div className="dropdown mt-2">
-          <button className="px-3 py-1.5 w-48 gap-2 items-center justify-center transition-all focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
+        <div className="dropdown mt-2 w-full">
+          <button className="px-3 py-1.5 w-full gap-2 items-center justify-center transition-all focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
             <svg
               className="w-4 h-4 ml-1"
               fill="currentColor"
