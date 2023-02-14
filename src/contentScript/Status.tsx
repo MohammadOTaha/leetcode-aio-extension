@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { requestProblemStatus } from '../background/messanger';
 
 const faceSVGPaths = {
   happy: [
@@ -85,11 +86,26 @@ const statusString = {
 };
 
 export default function Status() {
-  const [status, setStatus] = useState('happy');
+  const [status, setStatus] = useState('default');
+
+  const url = window.location.href;
+  const urlWithoutProtocol = url.replace(/(^\w+:|^)\/\//, '');
+  const problemName = urlWithoutProtocol.split('/')[2];
 
   const handleStatusChange = (status) => {
     setStatus(status);
   };
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const status = await requestProblemStatus(problemName);
+      setStatus(status);
+    }
+
+    fetchStatus().catch((err) => {
+      console.log(err);
+    });
+  }, [problemName]);
 
   return (
     <>

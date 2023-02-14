@@ -1,4 +1,6 @@
 import jwtDecode from 'jwt-decode';
+import firebase from '../background/firebase';
+import { where, query, getDocs, collection } from 'firebase/firestore';
 
 class LeetCodeSingleton {
   private static instance: LeetCodeSingleton;
@@ -18,6 +20,19 @@ class LeetCodeSingleton {
 
   public getUserName() {
     return this.decoded.username;
+  }
+
+  public async getProblemStatus(problemName: string) {
+    const statusRef = collection(firebase.getDb(), 'status');
+    const q = query(statusRef, where('problem', '==', problemName));
+    const querySnapshot = await getDocs(q);
+
+    let status = null;
+    querySnapshot.forEach((doc) => {
+      status = doc.data();
+    });
+
+    return status?.status;
   }
 }
 
