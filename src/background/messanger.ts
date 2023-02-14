@@ -1,11 +1,15 @@
 import { Messages } from '../enums/Messages';
 
-export async function requestSessionCookie() {
-  return await sendMessage({ message: Messages.SESSION_COOKIE_REQUEST });
+export async function getSessionCookie() {
+  return await sendMessage({ message: Messages.SESSION_COOKIE_GET });
 }
 
-export async function requestProblemStatus(problemName: string) {
-  return await sendMessage({ message: Messages.PROBLEM_STATUS_REQUEST, problemName });
+export async function getProblemStatus(problemName: string) {
+  return await sendMessage({ message: Messages.PROBLEM_STATUS_GET, problemName });
+}
+
+export async function setProblemStatus(problemName: string, status: string) {
+  return await sendMessage({ message: Messages.PROBLEM_STATUS_SET, problemName, status });
 }
 
 function sendMessage(message) {

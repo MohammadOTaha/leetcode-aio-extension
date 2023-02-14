@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { requestProblemStatus } from '../background/messanger';
+import { getProblemStatus, setProblemStatus } from '../background/messanger';
 
 const faceSVGPaths = {
   happy: [
@@ -94,11 +94,14 @@ export default function Status() {
 
   const handleStatusChange = (status) => {
     setStatus(status);
+    setProblemStatus(problemName, status)
+      .then(() => alert('Status updated!'))
+      .catch(() => alert('Error updating status!'));
   };
 
   useEffect(() => {
     const fetchStatus = async () => {
-      const status = await requestProblemStatus(problemName);
+      const status = await getProblemStatus(problemName);
       setStatus(status);
     };
 

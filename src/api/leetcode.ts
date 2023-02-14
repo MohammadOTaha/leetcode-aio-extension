@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import firebase from './firebase';
-import { where, query, getDocs, collection } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, addDoc } from 'firebase/firestore';
 
 class LeetCodeSingleton {
   private static instance: LeetCodeSingleton;
@@ -23,8 +23,13 @@ class LeetCodeSingleton {
   }
 
   public async getProblemStatus(problemName: string) {
+    // find status that has problem == problemName and user == this.getUserName()
     const statusRef = collection(firebase.getDb(), 'status');
-    const q = query(statusRef, where('problem', '==', problemName));
+    const q = query(
+      statusRef,
+      where('problem', '==', problemName),
+      where('user', '==', this.getUserName())
+    );
     const querySnapshot = await getDocs(q);
 
     let status = null;
@@ -33,6 +38,38 @@ class LeetCodeSingleton {
     });
 
     return status?.status;
+  }
+
+  public async setProblemStatus(problemName: string, status: string) {
+    // find status that has problem == problemName and user == this.getUserName()
+    const statusRef = collection(firebase.getDb(), 'status');
+    const q = query(
+      statusRef,
+      where('problem', '==', problemName),
+      where('user', '==', this.getUserName())
+    );
+    const querySnapshot = await getDocs(q);
+
+    let statusDoc = null;
+    querySnapshot.forEach((doc) => {
+      statusDoc = doc;
+    });
+
+    if (statusDoc) {
+      await setDoc(statusDoc.ref, {
+        problem: problemName,
+        user: this.getUserName(),
+        status
+      });
+    } else {
+      await addDoc(statusRef, {
+        problem: problemName,
+        user: this.getUserName(),
+        status
+      });
+    }
+
+    return true;
   }
 }
 

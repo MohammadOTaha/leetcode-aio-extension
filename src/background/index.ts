@@ -15,7 +15,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.message === Messages.SESSION_COOKIE_REQUEST) {
+  if (request.message === Messages.SESSION_COOKIE_GET) {
     chrome.cookies.get({ url: 'https://leetcode.com', name: 'LEETCODE_SESSION' }, (cookie) => {
       if (cookie) {
         sendResponse(cookie.value);
@@ -25,10 +25,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 
-  if (request.message === Messages.PROBLEM_STATUS_REQUEST) {
+  if (request.message === Messages.PROBLEM_STATUS_GET) {
     chrome.cookies.get({ url: 'https://leetcode.com', name: 'LEETCODE_SESSION' }, (cookie) => {
       if (cookie) {
         LeetCodeSingleton.getInstance(cookie.value).getProblemStatus(request.problemName).then((status) => {
+          sendResponse(status);
+        });
+      } else {
+        sendResponse(null);
+      }
+    });
+  }
+
+  if (request.message === Messages.PROBLEM_STATUS_SET) {
+    chrome.cookies.get({ url: 'https://leetcode.com', name: 'LEETCODE_SESSION' }, (cookie) => {
+      if (cookie) {
+        LeetCodeSingleton.getInstance(cookie.value).setProblemStatus(request.problemName, request.status).then((status) => {
           sendResponse(status);
         });
       } else {

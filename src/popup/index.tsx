@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import LeetCodeSingleton from '../api/leetcode';
 import '../assets/tailwind.css';
-import { requestSessionCookie } from '../background/messanger';
+import { getSessionCookie } from '../background/messanger';
 import Popup from './Popup';
 
 async function render() {
@@ -12,7 +12,7 @@ async function render() {
 
   let username, error;
   try {
-    let sessionCookie = await requestSessionCookie();
+    let sessionCookie = await getSessionCookie();
     username = LeetCodeSingleton.getInstance(sessionCookie).getUserName();
   } catch (e) {
     error = true;
