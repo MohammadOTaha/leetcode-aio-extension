@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { requestProblemStatus } from '../background/messanger';
 
 const faceSVGPaths = {
@@ -86,7 +86,7 @@ const statusString = {
 };
 
 export default function Status() {
-  const [status, setStatus] = useState('default');
+  const [status, setStatus] = useState(null);
 
   const url = window.location.href;
   const urlWithoutProtocol = url.replace(/(^\w+:|^)\/\//, '');
@@ -100,12 +100,12 @@ export default function Status() {
     const fetchStatus = async () => {
       const status = await requestProblemStatus(problemName);
       setStatus(status);
-    }
+    };
 
-    fetchStatus().catch((err) => {
-      console.log(err);
-    });
-  }, [problemName]);
+    fetchStatus().catch(() => setStatus('default'));
+  }, []);
+
+  if (status === null) return <></>;
 
   return (
     <>
@@ -144,7 +144,7 @@ export default function Status() {
 
         {/*  update status */}
         <div className="flex ml-2 gap-2">
-          <span className="font-bold pt-[1px]">Change to:</span>
+          <span className="font-bold pt-[3px]">Change to:</span>
           {Object.keys(faceSVGPaths).map((key, index) => {
             return (
               <button
@@ -181,7 +181,7 @@ export default function Status() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={2}
+              strokeWidth={2.5}
               stroke="currentColor"
               className="w-4 h-4">
               <path

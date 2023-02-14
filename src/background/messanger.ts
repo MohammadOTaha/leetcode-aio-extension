@@ -12,7 +12,7 @@ function sendMessage(message) {
   return new Promise<string>((resolve, reject) => {
     chrome.runtime.sendMessage(message, (response) => {
       if (chrome.runtime.lastError || !response) {
-        reject('Session cookie not found');
+        reject('MESSENGER.SEND_MESSAGE_ERR');
       } else {
         resolve(response);
       }
