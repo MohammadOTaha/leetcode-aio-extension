@@ -93,10 +93,12 @@ export default function Status() {
   const problemName = urlWithoutProtocol.split('/')[2];
 
   const handleStatusChange = (status) => {
-    setStatus(status);
     setProblemStatus(problemName, status)
-      .then(() => alert('Status updated!'))
-      .catch(() => alert('Error updating status!'));
+      .then(() => {
+        setStatus(status);
+        alert('Status updated!');
+      })
+      .catch(() => alert('Error updating status! Please refresh the page or try again later.'));
   };
 
   useEffect(() => {
