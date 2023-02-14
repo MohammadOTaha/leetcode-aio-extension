@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const faceSVGPaths = {
   happy: [
@@ -60,40 +60,65 @@ const faceSVGPaths = {
       d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z"
       fill="currentColor"
     />
+  ],
+  default: [
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
+    />
   ]
 };
 
 const faceColor = {
   happy: 'text-green-500',
   neutral: 'text-yellow-500',
-  sad: 'text-red-500'
+  sad: 'text-red-500',
+  default: 'text-gray-500'
 };
 
 const statusString = {
   happy: '100% understood!',
   neutral: 'Need to review the code.',
-  sad: 'Needs to be solved again.'
+  sad: 'Needs to be solved again.',
+  default: 'Not marked.'
 };
 
-export default function Status({ status }) {
+export default function Status() {
+  const [status, setStatus] = useState('happy');
+
+  const handleStatusChange = (status) => {
+    setStatus(status);
+  };
+
   return (
-    <div className="dropdown">
-      <label tabIndex={0} className={`btn btn-circle btn-ghost btn-xs ${faceColor[status]}`}>
+    <>
+      <div
+        tabIndex={0}
+        className={`
+           ${faceColor[status]} 
+           rounded
+           hover:bg-fill-3 
+           dark:hover:bg-dark-fill-3
+           cursor-pointer
+           p-[2px]
+           `}>
         <svg
-          width="1.65em"
-          height="1.65em"
+          className="w-5 h-5"
           viewBox="0 0 24 24"
-          fill="currentColor"
+          fill="none"
+          strokeWidth={status === 'default' ? 2 : 0}
+          stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg">
           {faceSVGPaths[status].map((path, index) => (
             <React.Fragment key={index}>{path}</React.Fragment>
           ))}
         </svg>
-      </label>
+      </div>
 
       <div
         tabIndex={0}
-        className="flex flex-col dropdown-content fixed md:block shadow-2xl w-[16rem] px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
+        className="flex flex-col dropdown-content fixed md:block shadow-level3 dark:shadow-dark-level3 w-[17rem] px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
         <div className="flex ml-2 gap-2">
           <span className="font-bold">Status:</span>
           <span className={`font-bold ${faceColor[status]}`}>{statusString[status]}</span>
@@ -104,84 +129,42 @@ export default function Status({ status }) {
         {/*  update status */}
         <div className="flex ml-2 gap-2">
           <span className="font-bold pt-[1px]">Change to:</span>
-          <button
-            className={
-              'btn btn-circle btn-ghost btn-xs text-green-500' +
-              (status === 'happy' ? ' bg-gray-700' : '')
-            }
-            onClick={() => {
-              console.log('happy');
-            }}>
-            <svg
-              width="1.65em"
-              height="1.65em"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
-              {faceSVGPaths['happy'].map((path, index) => (
-                <React.Fragment key={index}>{path}</React.Fragment>
-              ))}
-            </svg>
-          </button>
-          <button
-            className={
-              'btn btn-circle btn-ghost btn-xs text-yellow-500' +
-              (status === 'neutral' ? ' bg-gray-700' : '')
-            }
-            onClick={() => {
-              console.log('neutral');
-            }}>
-            <svg
-              width="1.65em"
-              height="1.65em"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
-              {faceSVGPaths['neutral'].map((path, index) => (
-                <React.Fragment key={index}>{path}</React.Fragment>
-              ))}
-            </svg>
-          </button>
-          <button
-            className={
-              'btn btn-circle btn-ghost btn-xs text-red-500' +
-              (status === 'sad' ? ' bg-gray-700' : '')
-            }
-            onClick={() => {
-              console.log('sad');
-            }}>
-            <svg
-              width="1.65em"
-              height="1.65em"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
-              {faceSVGPaths['sad'].map((path, index) => (
-                <React.Fragment key={index}>{path}</React.Fragment>
-              ))}
-            </svg>
-          </button>
+          {Object.keys(faceSVGPaths).map((key, index) => {
+            return (
+              <button
+                key={index}
+                className={
+                  'rounded hover:bg-fill-3 dark:hover:bg-dark-fill-3 cursor-pointer p-[2px] ' +
+                  faceColor[key] +
+                  (status === key ? ' bg-fill-3 dark:bg-dark-fill-3' : '')
+                }
+                onClick={() => {
+                  handleStatusChange(key);
+                }}>
+                <svg
+                  width="1.65em"
+                  height="1.65em"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  strokeWidth={key === 'default' ? 2 : 0}
+                  stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  {faceSVGPaths[key].map((path, index) => (
+                    <React.Fragment key={index}>{path}</React.Fragment>
+                  ))}
+                </svg>
+              </button>
+            );
+          })}
         </div>
 
         {/*  add reminder */}
         <div className="dropdown mt-2 w-full">
           <button className="px-3 py-1.5 w-full gap-2 items-center justify-center transition-all focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
-            <svg
-              className="w-4 h-4 ml-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm0 2a10 10 0 100-20 10 10 0 000 20z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="font-bold text-white">Add Reminder</span>
+            <b> Add Reminder </b>
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

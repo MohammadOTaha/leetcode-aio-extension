@@ -9,14 +9,15 @@ function render() {
     if (targetDiv) {
       clearInterval(timer);
 
-      if (document.getElementById('app-container')) {
+      if (document.getElementById('status-container')) {
         return;
       }
 
-      const appContainer = document.createElement('div');
-      appContainer.id = 'app-container';
-      targetDiv.insertBefore(appContainer, targetDiv.childNodes[1]);
-      createRoot(appContainer).render(<Status status={'neutral'} />);
+      const statusContainer = document.createElement('div');
+      statusContainer.id = 'status-container';
+      statusContainer.className = 'dropdown';
+      targetDiv.insertBefore(statusContainer, targetDiv.childNodes[1]);
+      createRoot(statusContainer).render(<Status />);
     }
   });
 }
