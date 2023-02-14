@@ -10,8 +10,7 @@ function render() {
       clearInterval(timer);
 
       if (document.getElementById('status-container')) {
-        createRoot(document.getElementById('status-container')).render(<Status />);
-        return;
+        document.getElementById('status-container').remove();
       }
 
       const statusContainer = document.createElement('div');
