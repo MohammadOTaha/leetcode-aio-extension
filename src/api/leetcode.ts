@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import firebase from '../background/firebase';
+import firebase from './firebase';
 import { where, query, getDocs, collection } from 'firebase/firestore';
 
 class LeetCodeSingleton {
