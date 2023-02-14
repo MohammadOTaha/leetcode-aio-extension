@@ -23,7 +23,6 @@ class LeetCodeSingleton {
   }
 
   public async getProblemStatus(problemName: string) {
-    // find status that has problem == problemName and user == this.getUserName()
     const statusRef = collection(firebase.getDb(), 'status');
     const q = query(
       statusRef,
@@ -41,7 +40,6 @@ class LeetCodeSingleton {
   }
 
   public async setProblemStatus(problemName: string, status: string) {
-    // find status that has problem == problemName and user == this.getUserName()
     const statusRef = collection(firebase.getDb(), 'status');
     const q = query(
       statusRef,

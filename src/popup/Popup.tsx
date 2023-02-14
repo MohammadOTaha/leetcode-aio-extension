@@ -1,19 +1,11 @@
 import React from 'react';
 
-interface PopupProps {
-  username?: string;
-  error?: boolean;
-}
-
-const Popup: React.FC<PopupProps> = ({ username, error }) => {
+const Popup = () => {
   return (
-    <div className="w-96">
-      <p className="text-2xl text-green-900 text-center">LeetCode Problems Status</p>
-      {error ? (
-        <p className="text-red-900 text-center">Please login to LeetCode first.</p>
-      ) : (
-        <p className="text-green-900 text-center">Hello, {username}!</p>
-      )}
+    <div className="w-52">
+      Nothing to see here.
+      <br/>
+      Go to a LeetCode problem page to see the status.
     </div>
   );
 };
