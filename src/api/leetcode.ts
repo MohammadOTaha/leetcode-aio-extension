@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import firebase from './firebase';
-import { collection, getDocs, query, where, setDoc, addDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, addDoc, deleteDoc } from 'firebase/firestore';
 
 class LeetCodeSingleton {
   private static instance: LeetCodeSingleton;
@@ -65,6 +65,75 @@ class LeetCodeSingleton {
         user: this.getUserName(),
         status
       });
+    }
+
+    return true;
+  }
+
+  public async getProblemReminder(problemName: string) {
+    const reminderRef = collection(firebase.getDb(), 'reminder');
+    const q = query(
+      reminderRef,
+      where('problem', '==', problemName),
+      where('user', '==', this.getUserName())
+    );
+    const querySnapshot = await getDocs(q);
+
+    let reminder = null;
+    querySnapshot.forEach((doc) => {
+      reminder = doc.data();
+    });
+
+    return reminder?.dateTime;
+  }
+
+  public async setProblemReminder(problemName: string, dateTime: Date) {
+    const reminderRef = collection(firebase.getDb(), 'reminder');
+    const q = query(
+      reminderRef,
+      where('problem', '==', problemName),
+      where('user', '==', this.getUserName())
+    );
+    const querySnapshot = await getDocs(q);
+
+    let reminderDoc = null;
+    querySnapshot.forEach((doc) => {
+      reminderDoc = doc;
+    });
+
+    if (reminderDoc) {
+      await setDoc(reminderDoc.ref, {
+        problem: problemName,
+        user: this.getUserName(),
+        dateTime
+      });
+    } else {
+      await addDoc(reminderRef, {
+        problem: problemName,
+        user: this.getUserName(),
+        dateTime
+      });
+    }
+
+    return true;
+  }
+
+  public async clearProblemReminder(problemName: string) {
+    const reminderRef = collection(firebase.getDb(), 'reminder');
+    const q = query(
+      reminderRef,
+      where('problem', '==', problemName),
+      where('user', '==', this.getUserName())
+    );
+    const querySnapshot = await getDocs(q);
+
+    let reminderDoc = null;
+    querySnapshot.forEach((doc) => {
+      reminderDoc = doc;
+    });
+
+    if (reminderDoc) {
+      await deleteDoc(reminderDoc.ref);
     }
 
     return true;
