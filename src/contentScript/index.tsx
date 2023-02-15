@@ -15,7 +15,6 @@ function render() {
 
       const statusContainer = document.createElement('div');
       statusContainer.id = 'status-container';
-      statusContainer.className = 'dropdown';
       targetDiv.insertBefore(statusContainer, targetDiv.childNodes[1]);
       createRoot(statusContainer).render(<Status />);
     }

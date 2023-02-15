@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getProblemStatus, setProblemStatus } from '../background/messanger';
+import { Popover, Transition } from '@headlessui/react';
 
 const faceSVGPaths = {
   happy: [
@@ -87,18 +88,27 @@ const statusString = {
 
 export default function Status() {
   const [status, setStatus] = useState(null);
+  const [showAddReminder, setShowAddReminder] = useState(true);
+  const [reminderDate, setReminderDate] = useState(null);
+  const [reminderTime, setReminderTime] = useState(null);
 
-  const url = window.location.href;
-  const urlWithoutProtocol = url.replace(/(^\w+:|^)\/\//, '');
-  const problemName = urlWithoutProtocol.split('/')[2];
+  const problemName = window.location.href.replace(/(^\w+:|^)\/\//, '').split('/')[2];
 
   const handleStatusChange = (status) => {
     setProblemStatus(problemName, status)
       .then(() => {
         setStatus(status);
-        alert('Status updated!');
+        // alert('Status updated!');
       })
       .catch(() => alert('Error updating status! Please refresh the page or try again later.'));
+  };
+
+  const handleAddReminderOnClick = () => {
+    setShowAddReminder(false);
+  };
+
+  const handleCancelOnClick = () => {
+    setShowAddReminder(true);
   };
 
   useEffect(() => {
@@ -113,9 +123,8 @@ export default function Status() {
   if (status === null) return <></>;
 
   return (
-    <>
-      <div
-        tabIndex={0}
+    <Popover className="relative">
+      <Popover.Button
         className={`
            ${faceColor[status]} 
            rounded
@@ -135,71 +144,134 @@ export default function Status() {
             <React.Fragment key={index}>{path}</React.Fragment>
           ))}
         </svg>
-      </div>
+      </Popover.Button>
 
-      <div
-        tabIndex={0}
-        className="flex flex-col dropdown-content fixed md:block shadow-level3 dark:shadow-dark-level3 w-[17rem] px-3 py-4 rounded-lg bg-layer-2 dark:bg-dark-layer-2 opacity-100">
-        <div className="flex ml-2 gap-2">
-          <span className="font-bold">Status:</span>
-          <span className={`font-bold ${faceColor[status]}`}>{statusString[status]}</span>
-        </div>
+      <Transition
+        as={React.Fragment}
+        enter="transition duration-100 ease-out"
+        enterFrom="transform scale-95 opacity-0"
+        enterTo="transform scale-100 opacity-100"
+        leave="transition duration-75 ease-out"
+        leaveFrom="transform scale-100 opacity-100"
+        leaveTo="transform scale-95 opacity-0">
+        <Popover.Panel className="absolute z-10 mt-1">
+          <div className="overflow-hidden rounded-lg shadow-level3 dark:shadow-dark-level3 ring-1 ring-black ring-opacity-5">
+            <div className="flex flex-col bg-layer-2 dark:bg-dark-layer-2 px-3 py-4 w-[17rem]">
+              <div className="flex ml-2 gap-2">
+                <span className="font-bold">Status:</span>
+                <span className={`font-bold ${faceColor[status]}`}>{statusString[status]}</span>
+              </div>
 
-        <div className="divider my-0 -mx-3" />
+              <div className="divider my-0 -mx-3 opacity-50" />
 
-        {/*  update status */}
-        <div className="flex ml-2 gap-2">
-          <span className="font-bold pt-[3px]">Change to:</span>
-          {Object.keys(faceSVGPaths).map((key, index) => {
-            return (
-              <button
-                key={index}
-                className={
-                  'rounded hover:bg-fill-3 dark:hover:bg-dark-fill-3 cursor-pointer p-[2px] ' +
-                  faceColor[key] +
-                  (status === key ? ' bg-fill-3 dark:bg-dark-fill-3' : '')
-                }
-                onClick={() => {
-                  handleStatusChange(key);
-                }}>
-                <svg
-                  width="1.65em"
-                  height="1.65em"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth={key === 'default' ? 2 : 0}
-                  stroke="currentColor"
-                  xmlns="http://www.w3.org/2000/svg">
-                  {faceSVGPaths[key].map((path, index) => (
-                    <React.Fragment key={index}>{path}</React.Fragment>
-                  ))}
-                </svg>
-              </button>
-            );
-          })}
-        </div>
+              <div className="flex ml-2 gap-2">
+                <span className="font-bold pt-[3px]">Change to:</span>
+                {Object.keys(faceSVGPaths).map((key, index) => {
+                  return (
+                    <button
+                      key={index}
+                      className={
+                        'rounded hover:bg-fill-3 dark:hover:bg-dark-fill-3 cursor-pointer p-[2px] ' +
+                        faceColor[key] +
+                        (status === key ? ' bg-fill-3 dark:bg-dark-fill-3' : '')
+                      }
+                      onClick={() => {
+                        handleStatusChange(key);
+                      }}>
+                      <svg
+                        width="1.65em"
+                        height="1.65em"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        strokeWidth={key === 'default' ? 2 : 0}
+                        stroke="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        {faceSVGPaths[key].map((path, index) => (
+                          <React.Fragment key={index}>{path}</React.Fragment>
+                        ))}
+                      </svg>
+                    </button>
+                  );
+                })}
+              </div>
 
-        {/*  add reminder */}
-        <div className="dropdown mt-2 w-full">
-          <button className="px-3 py-1.5 w-full gap-2 items-center justify-center transition-all focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="currentColor"
-              className="w-4 h-4">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5"
-              />
-            </svg>
+              <div className="mt-2 w-full gap-2">
+                {showAddReminder ? (
+                  <button
+                    onClick={handleAddReminderOnClick}
+                    className="px-3 py-1.5 w-full gap-2 items-center justify-center focus:outline-none inline-flex bg-fill-3 dark:bg-dark-fill-3 hover:bg-fill-2 dark:hover:bg-dark-fill-2 text-label-2 dark:text-dark-label-2 rounded-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                      stroke="currentColor"
+                      className="w-4 h-4">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5"
+                      />
+                    </svg>
 
-            <b> Add Reminder </b>
-          </button>
-        </div>
-      </div>
-    </>
+                    <b> Add Reminder </b>
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="date"
+                        className="w-1/2 px-2 py-1.5 rounded-lg bg-fill-3 dark:bg-dark-fill-3 text-label-2 dark:text-dark-label-2"
+                        onChange={(e) => setReminderDate(e.target.value)}
+                      />
+
+                      <input
+                        type="time"
+                        className="w-1/2 px-2 py-1.5 rounded-lg bg-fill-3 dark:bg-dark-fill-3 text-label-2 dark:text-dark-label-2"
+                        onChange={(e) => setReminderTime(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button className="px-3 py-1.5 w-4/5 gap-2 items-center justify-center  focus:outline-none inline-flex bg-green-s dark:bg-dark-green-s hover:bg-green-3 dark:hover:bg-dark-green-3 text-white dark:text-dark-label-2 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2.5}
+                          stroke="currentColor"
+                          className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+
+                        <b> Confirm </b>
+                      </button>
+
+                      <button
+                        onClick={handleCancelOnClick}
+                        className="px-3 py-1.5 w-1/5 items-center justify-center  focus:outline-none inline-flex bg-red-s dark:bg-dark-red-s hover:bg-red-3 dark:hover:bg-dark-red-3 text-white dark:text-dark-label-2 rounded-lg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2.5}
+                          stroke="currentColor"
+                          className="w-4 h-4">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </Popover.Panel>
+      </Transition>
+    </Popover>
   );
 }

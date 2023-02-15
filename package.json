@@ -35,6 +35,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.10",
     "autoprefixer": "^10.4.13",
     "daisyui": "^2.50.0",
     "firebase": "^9.17.1",
