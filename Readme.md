@@ -4,6 +4,10 @@
 This extension is used to mark problems in LeetCode by how sure you are about the solution. 
 It also provides a reminder for the problems you are not sure about.
 
+## Features
+- Set the status of a problem (Happy, Neutral, Sad, or None)
+- Set a reminder for a problem (a notification will be shown in the browser)
+
 ## Installation
 > The extension is not published (yet), so you need to install it manually.
 1. `git clone https://github.com/MohammadOTaha/leetcode-status-extension.git`
