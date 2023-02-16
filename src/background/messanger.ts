@@ -5,30 +5,79 @@ export async function getSessionCookie() {
 }
 
 export async function getProblemStatus(problemName: string) {
-  return await sendMessage({ message: Messages.PROBLEM_STATUS_GET, problemName });
+  const { error, data } = await sendMessage({ message: Messages.PROBLEM_STATUS_GET, problemName });
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return data;
 }
 
 export async function setProblemStatus(problemName: string, status: string) {
-  return await sendMessage({ message: Messages.PROBLEM_STATUS_SET, problemName, status });
+  const { error, data } = await sendMessage({
+    message: Messages.PROBLEM_STATUS_SET,
+    problemName,
+    status
+  });
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return data;
 }
 
 export async function getProblemReminder(problemName: string) {
-  return await sendMessage({ message: Messages.PROBLEM_REMINDER_GET, problemName });
+  const { error, data } = await sendMessage({
+    message: Messages.PROBLEM_REMINDER_GET,
+    problemName
+  });
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return data;
 }
 
 export async function setProblemReminder(problemName: string, dateTime: Date) {
-  return await sendMessage({ message: Messages.PROBLEM_REMINDER_SET, problemName, dateTime });
+  const { error, data } = await sendMessage({
+    message: Messages.PROBLEM_REMINDER_SET,
+    problemName,
+    dateTime
+  });
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return data;
 }
 
 export async function clearProblemReminder(problemName: string) {
-  return await sendMessage({ message: Messages.PROBLEM_REMINDER_CLEAR, problemName });
+  const { error, data } = await sendMessage({
+    message: Messages.PROBLEM_REMINDER_CLEAR,
+    problemName
+  });
+
+  if (error) {
+    throw new Error(error);
+  }
+
+  return data;
 }
 
 function sendMessage(message) {
-  return new Promise<string>((resolve, reject) => {
+  interface Response {
+    error?: string;
+    data?: any;
+  }
+
+  return new Promise<Response>((resolve, reject) => {
     chrome.runtime.sendMessage(message, (response) => {
       if (chrome.runtime.lastError || !response) {
-        reject('MESSENGER.SEND_MESSAGE_ERR');
+        reject('Something went wrong. Please try again later.');
       } else {
         resolve(response);
       }

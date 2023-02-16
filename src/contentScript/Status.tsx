@@ -95,19 +95,16 @@ const statusString = {
 export default function Status() {
   const [status, setStatus] = useState(null);
   const [showAddReminder, setShowAddReminder] = useState(true);
-  const [reminderDate, setReminderDate] = useState(null);
-  const [reminderTime, setReminderTime] = useState(null);
+  const [reminderDate, setReminderDate] = useState('');
+  const [reminderTime, setReminderTime] = useState('');
   const [hasReminder, setHasReminder] = useState(false);
 
   const problemName = window.location.href.replace(/(^\w+:|^)\/\//, '').split('/')[2];
 
   const handleStatusChange = (status) => {
     setProblemStatus(problemName, status)
-      .then(() => {
-        setStatus(status);
-        // alert('Status updated!');
-      })
-      .catch(() => alert('Error updating status! Please refresh the page or try again later.'));
+      .then(() => setStatus(status))
+      .catch((err) => alert(err));
   };
 
   const handleAddReminderOnClick = () => {
@@ -132,7 +129,7 @@ export default function Status() {
         alert(hasReminder ? 'Reminder updated!' : 'Reminder added!');
         setHasReminder(true);
       })
-      .catch(() => alert('Error adding reminder. Please refresh the page or try again later.'));
+      .catch((err) => alert(err));
   };
 
   const handleClearReminderOnClick = () => {
@@ -142,7 +139,7 @@ export default function Status() {
         setShowAddReminder(true);
         alert('Reminder cleared!');
       })
-      .catch(() => alert('Error clearing reminder. Please refresh the page or try again later.'));
+      .catch((err) => alert(err));
   };
 
   useEffect(() => {
@@ -150,26 +147,28 @@ export default function Status() {
       const status = await getProblemStatus(problemName);
       setStatus(status);
     };
-
-    fetchStatus().catch(() => setStatus('default'));
+    fetchStatus().catch(() => setStatus(null));
 
     const fetchReminder = async () => {
       const reminder = await getProblemReminder(problemName);
-      if (reminder) {
-        const dateTime = new Date(reminder);
 
-        setReminderDate(dateTime.toISOString().split('T')[0]);
-        setReminderTime(
-          dateTime.toISOString().split('T')[1].split(':')[0] +
-            ':' +
-            dateTime.toISOString().split('T')[1].split(':')[1]
-        );
-
-        setHasReminder(true);
-        setShowAddReminder(false);
+      if (!reminder) {
+        setShowAddReminder(true);
+        return;
       }
-    };
 
+      const dateTime = new Date(reminder);
+
+      setReminderDate(dateTime.toISOString().split('T')[0]);
+      setReminderTime(
+        dateTime.toISOString().split('T')[1].split(':')[0] +
+          ':' +
+          dateTime.toISOString().split('T')[1].split(':')[1]
+      );
+
+      setHasReminder(true);
+      setShowAddReminder(false);
+    };
     fetchReminder().catch(() => setShowAddReminder(true));
   }, []);
 
@@ -178,14 +177,7 @@ export default function Status() {
   return (
     <Popover className="relative">
       <Popover.Button
-        className={`
-           ${faceColor[status]} 
-           rounded
-           hover:bg-fill-3 
-           dark:hover:bg-dark-fill-3
-           cursor-pointer
-           p-[2px]
-           `}>
+        className={`${faceColor[status]} rounded hover:bg-fill-3 dark:hover:bg-dark-fill-3 cursor-pointer p-[2px]`}>
         <svg
           className="w-5 h-5"
           viewBox="0 0 24 24"
@@ -300,7 +292,7 @@ export default function Status() {
                             viewBox="0 0 24 24"
                             strokeWidth={2}
                             stroke="currentColor"
-                            className="w-4 h-4">
+                            className="w-3 h-3">
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
