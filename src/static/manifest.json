@@ -10,7 +10,9 @@
   },
   "permissions": [
     "scripting",
-    "cookies"
+    "cookies",
+    "notifications",
+    "alarms"
   ],
   "host_permissions": [
     "https://leetcode.com/*"

@@ -71,12 +71,55 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         LeetCodeSingleton.getInstance(cookie)
           .clearProblemReminder(request.problemName)
           .then((status) => sendResponse({ data: status }))
-          .catch(() => sendResponse({ error: 'Failed to clear problem reminder. Please try again.' }))
+          .catch(() =>
+            sendResponse({ error: 'Failed to clear problem reminder. Please try again.' })
+          )
       )
       .catch((reason) => sendResponse({ error: reason }));
   }
 
+  if (request.message === Messages.REMINDER_SET_ALARM) {
+    chrome.alarms.create(request.problemName, { when: new Date(request.dateTime).getTime() });
+
+    chrome.alarms.getAll().then((alarms) => console.log(alarms));
+
+    sendResponse({ data: true });
+  }
+
+  if (request.message === Messages.REMINDER_CLEAR_ALARM) {
+    chrome.alarms.clear(request.problemName).then(() => sendResponse({ data: true }));
+
+    chrome.alarms.getAll().then((alarms) => console.log(alarms));
+  }
+
   return true;
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  chrome.notifications.create(alarm.name, {
+    type: 'basic',
+    iconUrl: 'icon.png',
+    title: 'LeetCode Reminder',
+    message: `It's time to solve ${alarm.name}!`,
+    buttons: [{ title: 'Go to problem' }]
+  });
+
+  getSessionCookie()
+    .then((cookie) =>
+      LeetCodeSingleton.getInstance(cookie)
+        .clearProblemReminder(alarm.name)
+        .then(() => console.log('Problem reminder cleared.'))
+        .catch(() => console.log('Failed to clear problem reminder.'))
+    )
+    .catch((reason) => console.log(reason));
+});
+
+chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+  chrome.tabs.create({ url: `https://leetcode.com/problems/${notificationId}` }).then(() => {
+    chrome.notifications.clear(notificationId);
+  });
+
+  chrome.alarms.clear(notificationId).then(() => console.log('Alarm cleared.'));
 });
 
 function getSessionCookie() {

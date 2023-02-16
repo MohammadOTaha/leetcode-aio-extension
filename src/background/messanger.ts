@@ -52,6 +52,12 @@ export async function setProblemReminder(problemName: string, dateTime: Date) {
     throw new Error(error);
   }
 
+  await sendMessage({
+    message: Messages.REMINDER_SET_ALARM,
+    problemName,
+    dateTime
+  });
+
   return data;
 }
 
@@ -64,6 +70,11 @@ export async function clearProblemReminder(problemName: string) {
   if (error) {
     throw new Error(error);
   }
+
+  await sendMessage({
+    message: Messages.REMINDER_CLEAR_ALARM,
+    problemName
+  });
 
   return data;
 }
