@@ -7,6 +7,7 @@ It also provides a reminder for the problems you are not sure about.
 ## Features
 - Set the status of a problem (Happy, Neutral, Sad, or None)
 - Set a reminder for a problem (a notification will be shown in the browser)
+- Seamless integration with LeetCode
 
 ## Installation
 > The extension is not published (yet), so you need to install it manually.
