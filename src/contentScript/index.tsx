@@ -3,22 +3,50 @@ import { createRoot } from 'react-dom/client';
 import '../assets/tailwind.css';
 import Status from './Status';
 
-function render() {
+function init() {
   const timer = setInterval(() => {
-    const targetDiv = document.getElementsByClassName('mt-3 flex space-x-4')[0];
-    if (targetDiv) {
+    const dockDiv = document.getElementsByClassName('mt-3 flex space-x-4')[0];
+    const statsDiv = document.getElementsByClassName('px-5 py-3 pt-[38px]')[0];
+
+    if (dockDiv && statsDiv) {
       clearInterval(timer);
 
-      if (document.getElementById('status-container')) {
-        document.getElementById('status-container').remove();
-      }
+      renderStatusIcon(dockDiv);
+      removeLikesAndDislikes(dockDiv);
+      removeDifficulty(dockDiv);
 
-      const statusContainer = document.createElement('div');
-      statusContainer.id = 'status-container';
-      targetDiv.insertBefore(statusContainer, targetDiv.childNodes[1]);
-      createRoot(statusContainer).render(<Status />);
+      removeStats(statsDiv);
     }
   });
+
+  function renderStatusIcon(targetDiv: Element) {
+    if (document.getElementById('status-container')) {
+      document.getElementById('status-container').remove();
+    }
+
+    const statusContainer = document.createElement('div');
+    statusContainer.id = 'status-container';
+    targetDiv.insertBefore(statusContainer, targetDiv.childNodes[1]);
+    createRoot(statusContainer).render(<Status />);
+  }
+
+  function removeLikesAndDislikes(targetDiv: Element) {
+    const container = targetDiv.childNodes[3];
+
+    for (let i = 0; i < container.childNodes.length; i++) {
+      container.childNodes[i].removeChild(container.childNodes[i].childNodes[1]);
+    }
+  }
+
+  function removeDifficulty(targetDiv: Element) {
+    targetDiv.removeChild(targetDiv.childNodes[0]);
+  }
+
+  function removeStats(targetDiv: Element) {
+    while (targetDiv.firstChild) {
+      targetDiv.removeChild(targetDiv.firstChild);
+    }
+  }
 }
 
-render();
+init();
