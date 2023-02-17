@@ -26,13 +26,12 @@ function init() {
 
     const statusContainer = document.createElement('div');
     statusContainer.id = 'status-container';
-    targetDiv.insertBefore(statusContainer, targetDiv.childNodes[1]);
+    targetDiv.insertBefore(statusContainer, targetDiv.firstChild);
     createRoot(statusContainer).render(<Status />);
   }
 
   function removeLikesAndDislikes(targetDiv: Element) {
     const container = targetDiv.childNodes[3];
-
     for (let i = 0; i < container.childNodes.length; i++) {
       container.childNodes[i].removeChild(container.childNodes[i].childNodes[1]);
     }
