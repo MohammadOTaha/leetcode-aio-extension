@@ -36,7 +36,11 @@ class LeetCodeSingleton {
       status = doc.data();
     });
 
-    return status?.status;
+    if (!status) {
+      return 'default';
+    }
+
+    return status.status;
   }
 
   public async setProblemStatus(problemName: string, status: string) {
