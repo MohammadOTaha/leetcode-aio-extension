@@ -191,8 +191,6 @@ export default function Status() {
         </svg>
       </Popover.Button>
 
-      <Popover.Overlay className="fixed inset-0 bg-black opacity-30" />
-
       <Transition
         as={React.Fragment}
         enter="transition duration-100 ease-out"
