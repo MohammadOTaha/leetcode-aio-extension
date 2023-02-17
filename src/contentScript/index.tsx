@@ -33,12 +33,14 @@ function init() {
   function removeLikesAndDislikes(targetDiv: Element) {
     const container = targetDiv.childNodes[3];
     for (let i = 0; i < container.childNodes.length; i++) {
-      container.childNodes[i].removeChild(container.childNodes[i].childNodes[1]);
+      if (container.childNodes[i].childNodes[1]) {
+        container.childNodes[i].removeChild(container.childNodes[i].childNodes[1]);
+      }
     }
   }
 
   function removeDifficulty(targetDiv: Element) {
-    targetDiv.removeChild(targetDiv.childNodes[0]);
+    targetDiv.removeChild(targetDiv.childNodes[1]);
   }
 
   function removeStats(targetDiv: Element) {
