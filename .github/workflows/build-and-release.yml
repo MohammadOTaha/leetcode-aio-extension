@@ -35,14 +35,19 @@ jobs:
           envkey_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           envkey_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
 
-      - name: Get version
-        id: get_version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - name: Print .env file
+        run: |
+          cat .env
+          ls -la
 
       - name: Build extension
         run: |
           yarn build
           zip -r extension.zip dist
+
+      - name: Get version
+        id: get_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: actions/create-release@v1
