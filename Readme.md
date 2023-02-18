@@ -15,14 +15,12 @@ It also provides a reminder for the problems you are not sure about.
 
 ## Installation
 > The extension is not published (yet), so you need to install it manually.
-1. `git clone https://github.com/MohammadOTaha/leetcode-status-extension.git`
-2. `cd leetcode-status-extension`
-3. `yarn install`
-4. `yarn build`
-5. Open Chrome and go to `chrome://extensions/`
-6. Enable `Developer mode`
-7. Click on `Load unpacked` and select the `dist` folder in the extension directory
-8. Enjoy! (and open issues if you find any bugs)
+1. Download the latest release from [here](https://github.com/MohammadOTaha/leetcode-aio-extension/releases)
+2. Extract the downloaded file
+3. Open `chrome://extensions/` in your browser
+4. Enable `Developer mode` in the top right corner
+5. Click on `Load unpacked` and select the extracted folder
+6. Enjoy! (Go to any problem page to see the extension in action)
 
 ## Usage
 After installing the extension, a new button will be added below the problem name,
