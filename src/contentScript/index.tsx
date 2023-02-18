@@ -40,7 +40,15 @@ function init() {
   }
 
   function removeDifficulty(targetDiv: Element) {
-    targetDiv.removeChild(targetDiv.childNodes[1]);
+    for (let i = 0; i < targetDiv.childNodes.length; i++) {
+      if (
+        targetDiv.childNodes[i]?.textContent === 'Easy' ||
+        targetDiv.childNodes[i]?.textContent === 'Medium' ||
+        targetDiv.childNodes[i]?.textContent === 'Hard'
+      ) {
+        targetDiv.removeChild(targetDiv.childNodes[i]);
+      }
+    }
   }
 
   function removeStats(targetDiv: Element) {
