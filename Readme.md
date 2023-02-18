@@ -7,6 +7,10 @@ It also provides a reminder for the problems you are not sure about.
 ## Features
 - Set the status of a problem (Happy, Neutral, Sad, or None)
 - Set a reminder for a problem (a notification will be shown in the browser)
+- Hides:
+  - Problem difficulty
+  - Problem likes and dislikes count
+  - Problem statistics
 - Seamless integration with LeetCode
 
 ## Installation
@@ -25,3 +29,4 @@ After installing the extension, a new button will be added below the problem nam
 through which you can set the status of the problem and/or set a reminder for it.
 ![Set Status](./docs/set_status.png)
 ![Set Reminder](./docs/add_reminder.png)
+![Update Reminder](./docs/update_reminder.png)
