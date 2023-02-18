@@ -35,11 +35,6 @@ jobs:
           envkey_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           envkey_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
 
-      - name: Print .env file
-        run: |
-          cat .env
-          ls -la
-
       - name: Build extension
         run: |
           yarn build
