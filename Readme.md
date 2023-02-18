@@ -1,4 +1,4 @@
-# LeetCode Problems Status and Reminders Extension
+# LeetCode AIO Extension
 
 ## Introduction
 This extension is used to mark problems in LeetCode by how sure you are about the solution. 
